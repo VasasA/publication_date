@@ -11,7 +11,7 @@
  * @param int $published_at
  *   A Unix timestamp representing the publication date to be altered. If no
  *   publication date has been set then $published_at should equal the defined
- *   constant PUBLICATION_DATE_DEFAULT.
+ *   constant PUBLICATION_DATE_MAX.
  * @param object $node
  *   The node object.
  * @param string $op
