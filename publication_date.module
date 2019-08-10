@@ -213,10 +213,25 @@ function publication_date_form_node_form_alter(&$form, &$form_state, $form_id) {
  * Validate the published date input.
  */
 function publication_date_pubdate_validate($form, &$form_state) {
-  // Validate the "Published on" field. As of PHP 5.1.0, strtotime returns FALSE
-  // instead of -1 upon failure.
-  if (!empty($form_state['values']['pubdate']) && strtotime($form_state['values']['pubdate']) === FALSE) {
-    form_set_error('pubdate', t('You have to specify a valid date for the published on field.'));
+  // Validate the "Published on" field.
+  if (!empty($form_state['values']['pubdate'])) {
+    $pubdate = strtotime($form_state['values']['pubdate']);
+
+    // As of PHP 5.1.0, strtotime returns FALSE instead of -1 upon failure.
+    if ($pubdate === FALSE) {
+      form_set_error('pubdate', t('You have to specify a valid date for the published on field.'));
+    }
+
+    // Same format as publication_date_form_node_form_alter().
+    $date_format = 'Y-m-d H:i:s';
+
+    // {publication_date}.published_at is stored as a type int(11) which is a 32-bit integer and as a
+    // result limits the range of acceptable dates. Make sure the date submitted is within that range.
+    $pubdate_min = -2147483648;
+    $pubdate_max = 2147483647;
+    if ($pubdate < $pubdate_min || $pubdate > $pubdate_max) {
+      form_set_error('pubdate', t('Only dates between @min and @max are supported.', array('@min' => format_date($pubdate_min, 'custom', $date_format), '@max' => format_date($pubdate_max, 'custom', $date_format))));
+    }
   }
 }
 
