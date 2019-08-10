@@ -215,7 +215,7 @@ function publication_date_form_node_form_alter(&$form, &$form_state, $form_id) {
 function publication_date_pubdate_validate($form, &$form_state) {
   // Validate the "Published on" field. As of PHP 5.1.0, strtotime returns FALSE
   // instead of -1 upon failure.
-  if (!empty($form_state['values']['pubdate']) && strtotime($form_state['values']['pubdate']) <= 0) {
+  if (!empty($form_state['values']['pubdate']) && strtotime($form_state['values']['pubdate']) === FALSE) {
     form_set_error('pubdate', t('You have to specify a valid date for the published on field.'));
   }
 }
