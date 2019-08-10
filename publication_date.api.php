@@ -6,10 +6,9 @@
  */
 
 /**
- * Allows modules to alter the publication date before it is saved to the
- * database on node update/insert.
+ * Alter the publication date before it is saved on node update/insert.
  *
- * @param integer $published_at
+ * @param int $published_at
  *   A Unix timestamp representing the publication date to be altered. If no
  *   publication date has been set then $published_at should equal the defined
  *   constant PUBLICATION_DATE_DEFAULT.
@@ -17,8 +16,8 @@
  *   The node object.
  * @param string $op
  *   The node opperation being performed:
- *   - 'insert': a new node was created
- *   - 'update': an existing node was updated
+ *   - 'insert': A new node was created.
+ *   - 'update': An existing node was updated.
  *
  * @see _publication_date_set_date()
  */

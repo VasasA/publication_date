@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Display Suite Integration
+ * Display Suite Integration.
  */
 
 /**

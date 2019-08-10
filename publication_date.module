@@ -76,8 +76,8 @@ function publication_date_node_delete($node) {
  *   The node object.
  * @param string $op
  *   The node opperation being performed:
- *   - 'insert': a new node was created
- *   - 'update': an existing node was updated
+ *   - 'insert': A new node was created.
+ *   - 'update': An existing node was updated.
  *
  * @see hook_node_insert()
  * @see hook_node_update()
@@ -116,7 +116,9 @@ function _publication_date_set_date($node, $op = '') {
  *
  * @param int $nid
  *   The node ID.
- * @return the publication date for the given node, or false if the node is not
+ *
+ * @return mixed
+ *   The publication date for the given node, or false if the node is not
  *   published.
  *
  * @see hook_node_load()
@@ -141,6 +143,7 @@ function publication_date_views_api() {
  * Implements hook_form_BASE_ID_alter().
  *
  * Display the publication date on the node edit form.
+ *
  * @note: This won't work where you have Display Suite/REL enabled.
  */
 function publication_date_form_node_form_alter(&$form, &$form_state, $form_id) {
@@ -196,7 +199,7 @@ function publication_date_form_node_form_alter(&$form, &$form_state, $form_id) {
     // set it to FALSE. We don't want to grant access to any extra fields.
     $children = element_children($form['options']);
     foreach ($children as $key => $value) {
-      if (!isset($form['options'][$value]['#access'])){
+      if (!isset($form['options'][$value]['#access'])) {
         $form['options'][$value]['#access'] = FALSE;
       }
     }
@@ -217,7 +220,6 @@ function publication_date_pubdate_validate($form, &$form_state) {
   if (!empty($form_state['values']['pubdate'])) {
     $pubdate = strtotime($form_state['values']['pubdate']);
 
-    // As of PHP 5.1.0, strtotime returns FALSE instead of -1 upon failure.
     if ($pubdate === FALSE) {
       form_set_error('pubdate', t('You have to specify a valid date for the published on field.'));
     }
@@ -225,8 +227,8 @@ function publication_date_pubdate_validate($form, &$form_state) {
     // Same format as publication_date_form_node_form_alter().
     $date_format = 'Y-m-d H:i:s';
 
-    // {publication_date}.published_at is stored as a type int(11) which is a 32-bit integer and as a
-    // result limits the range of acceptable dates. Make sure the date submitted is within that range.
+    // Make sure the date submitted is within the range that can be stored
+    // in the database as a 32-bit integer.
     $pubdate_min = -2147483648;
     $pubdate_max = 2147483647;
     if ($pubdate < $pubdate_min || $pubdate > $pubdate_max) {
@@ -273,9 +275,10 @@ function publication_date_permission() {
 /**
  * Helper function to generate permission each content type.
  *
- * @param $type
+ * @param string $type
  *   The machine-readable name of the node type.
- * @return
+ *
+ * @return array
  *   An array of permission names and description.
  */
 function publication_date_list_permissions($type) {
@@ -315,10 +318,10 @@ function publication_date_entity_property_info_alter(&$info) {
 /**
  * Publication date getter for hook_entity_property_info_alter()
  *
- * @param $entity
+ * @param object $entity
  *   The entity object.
  *
- * @return integer
+ * @return int
  *   The publication date as a timestamp get from the entity.
  */
 function _publication_date_published_at_getter($entity) {
@@ -328,10 +331,10 @@ function _publication_date_published_at_getter($entity) {
 /**
  * Publication date or now getter for hook_entity_property_info_alter()
  *
- * @param $entity
+ * @param object $entity
  *   The entity object.
  *
- * @return integer
+ * @return int
  *   The publication date (or REQUEST_TIME) as a timestamp get from the entity.
  */
 function _publication_date_published_at_or_now_getter($entity) {

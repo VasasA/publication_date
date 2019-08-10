@@ -6,28 +6,23 @@
  */
 
 /**
- * @todo Please document this function.
- * @see http://drupal.org/node/1354
- */
-
-/**
- * Implements hook_views_data()
+ * Implements hook_views_data().
  */
 function publication_date_views_data() {
   $data = array();
 
   $data['publication_date']['table']['group'] = t('Node');
 
-  // how is the scheduler table linked to the nodes
+  // Declare an implicit relationship to the node table.
   $data['publication_date']['table']['join']['node'] = array(
     'left_field' => 'nid',
     'field' => 'nid',
   );
 
-  // description of the fields (columns)
+  // Description of the published_at field.
   $data['publication_date']['published_at'] = array(
     'title' => t('Published at'),
-    'help' => t('Date/time on which the article has been published'),
+    'help' => t('Date/time at which the article was first published'),
     'field' => array(
       'handler' => 'views_handler_field_date',
       'click sortable' => TRUE,
@@ -94,7 +89,6 @@ function publication_date_views_data() {
       'handler' => 'views_handler_argument_node_created_week',
     ),
   );
-
 
   return $data;
 }
