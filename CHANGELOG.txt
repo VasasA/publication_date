@@ -9,6 +9,7 @@ Publication Date 7.x-2.x, xxxx-xx-xx
 #3067980 by fengtan: Allow negative timestamps in
   publication_date_pubdate_validate().
 #3070150 by fengtan: PDOException when submitting a date after Jan 18, 2038.
+#3074177 by jstoller: Replace unpublished content sorting hack with real Views handlers.
 
 Publication Date 7.x-2.2, 2015-03-06
 ------------------------------------------
