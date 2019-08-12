@@ -11,7 +11,7 @@
 function publication_date_views_data() {
   $data = array();
 
-  $data['publication_date']['table']['group'] = t('Node');
+  $data['publication_date']['table']['group'] = t('Content');
 
   // Declare an implicit relationship to the node table.
   $data['publication_date']['table']['join']['node'] = array(
@@ -22,17 +22,17 @@ function publication_date_views_data() {
   // Description of the published_at field.
   $data['publication_date']['published_at'] = array(
     'title' => t('Published at'),
-    'help' => t('Date/time at which the article was first published'),
+    'help' => t('Date when the content was first published.'),
     'field' => array(
-      'handler' => 'views_handler_field_date',
+      'handler' => 'views_handler_field_publication_date',
       'click sortable' => TRUE,
     ),
     'filter' => array(
-      'handler' => 'views_handler_filter_date',
+      'handler' => 'views_handler_filter_publication_date',
       'label' => t('Published at'),
     ),
     'sort' => array(
-      'handler' => 'views_handler_sort_date',
+      'handler' => 'views_handler_sort_publication_date',
     ),
   );
 

@@ -19,10 +19,10 @@ function publication_date_schema() {
         'default' => 0,
       ),
       'published_at' => array(
-        'description' => 'The timestamp of the node publication.',
+        'description' => 'The timestamp of the node\'s first publication.',
         'type' => 'int',
-        'not null' => TRUE,
-        'default' => 0,
+        'not null' => FALSE,
+        'default' => NULL,
       ),
     ),
     'indexes' => array(
@@ -82,5 +82,27 @@ function publication_date_update_7001() {
   db_update('publication_date')
     ->fields(array('published_at' => 2147483647))
     ->condition('published_at', 0)
+    ->execute();
+}
+
+/**
+ * Change default published_at value to NULL.
+ */
+function publication_date_update_7002() {
+  db_drop_index('publication_date', 'published_at');
+  db_change_field('publication_date', 'published_at', 'published_at', array(
+    'description' => 'The timestamp of the node\'s first publication.',
+    'type' => 'int',
+    'not null' => FALSE,
+    'default' => NULL,
+  ), array(
+    'indexes' => array(
+      'published_at' => array('published_at'),
+    ),
+  ));
+
+  db_update('publication_date')
+    ->fields(array('published_at' => NULL))
+    ->condition('published_at', 2147483647)
     ->execute();
 }
