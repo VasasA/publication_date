@@ -182,6 +182,7 @@ class PublicationDateTestCase extends DrupalWebTestCase {
    * Returns the value of our published-at field.
    *
    * @return string
+   *   Value of published_at field.
    */
   private function _getPubdateFieldValue() {
     $value = '';

@@ -177,7 +177,9 @@ function publication_date_form_node_form_alter(&$form, &$form_state, $form_id) {
       '#type' => 'textfield',
       '#title' => t('Published on'),
       '#maxlength' => 25,
-      '#description' => t('Format: %time. Leave blank to use the time of form submission.', array('%time' => format_date(REQUEST_TIME, 'custom', PUBLICATION_DATE_FORMAT))),
+      '#description' => t('Format: %time. Leave blank to use the time of form submission.', array(
+        '%time' => format_date(REQUEST_TIME, 'custom', PUBLICATION_DATE_FORMAT),
+      )),
       '#weight' => -1,
       '#access' => $pubdate_access,
       // If there is an existing publication date, set it as the default value.
