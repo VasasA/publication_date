@@ -17,11 +17,15 @@ define('PUBLICATION_DATE_FORMAT_WITH_TZ', 'Y-m-d H:i:s O');
 /**
  * Implements hook_node_load().
  *
- * For each node we set two properties...
+ * For each node we set four properties...
  *   - published_at: Equals the publication date in Epoc time, if one has been
  *     set, or NULL otherwise.
  *   - published_at_or_now: Equals published_at if a publication date has been
  *     set, or the current REQUEST_TIME if it hasn't.
+ *   - published_at_or_changed: Equals published_at if a publication date has
+ *     been set, or the node's changed timestamp if it hasn't.
+ *   - published_at_or_created: Equals published_at if a publication date has
+ *     been set, or the node's created timestamp if it hasn't.
  */
 function publication_date_node_load($nodes, $types) {
   foreach ($nodes as $node) {
