@@ -302,6 +302,8 @@ function publication_date_entity_property_info_alter(&$info) {
     'description' => t('The publication date of the node.'),
     'type' => 'date',
     'getter callback' => '_publication_date_published_at_getter',
+    'setter callback' => '_publication_date_published_at_setter',
+    'setter permission' => 'set any published on date',
   );
   $properties['published_at_or_now'] = array(
     'label' => t('Published at or now'),
@@ -334,6 +336,42 @@ function publication_date_entity_property_info_alter(&$info) {
  */
 function _publication_date_published_at_getter($entity) {
   return $entity->published_at;
+}
+
+/**
+ * Publication date setter for hook_entity_property_info_alter()
+ *
+ * @param object $entity
+ *   The entity object.
+ * @param string $name
+ *   The name of the published_at field.
+ * @param string $value
+ *   The timestamp to set as this entity's publication date.
+ */
+function _publication_date_published_at_setter(&$entity, $name, $value = NULL) {
+  // If a valid timestamp is provided then set it as the publication date.
+  if ($value !== NULL && is_int($value)) {
+    $entity->published_at = $value;
+    $entity->published_at_or_now = $value;
+    $entity->published_at_or_changed = $value;
+    $entity->published_at_or_created = $value;
+  }
+  // If a null value is submitted, but the entity is published, then reset the
+  // publication date to the current time.
+  elseif ($value === NULL && $entity->status) {
+    $entity->published_at = REQUEST_TIME;
+    $entity->published_at_or_now = REQUEST_TIME;
+    $entity->published_at_or_changed = REQUEST_TIME;
+    $entity->published_at_or_created = REQUEST_TIME;
+  }
+  // If a null value is submitted for an unpublished entity then set the
+  // publication date to NULL.
+  elseif ($value === NULL) {
+    $entity->published_at = NULL;
+    $entity->published_at_or_now = REQUEST_TIME;
+    $entity->published_at_or_changed = $entity->changed;
+    $entity->published_at_or_created = $entity->created;
+  }
 }
 
 /**
