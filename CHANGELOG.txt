@@ -13,6 +13,8 @@ Publication Date 7.x-2.3, xxxx-xx-xx
   handlers.
 #2656696 by jstoller, lamp5: If the time field is left blank when using Date
   Popup module strtotime() throws an error.
+#3081923 by jstoller: Published token should support NULL value and fallback
+  dates.
 by jstoller: Comment and coding standard improvements.
 by jstoller: Add setter callback for published_at field.
 
