@@ -16,7 +16,7 @@ function publication_date_ds_fields_info($entity_type) {
     $format_types = system_get_date_types();
     $date_formatters = array();
     foreach ($format_types as $formatter) {
-      $date_formatters['publication_date_' . $formatter['type']] = t($formatter['title']);
+      $date_formatters['publication_date_' . $formatter['type']] = t('@title', array('@title' => $formatter['title']));
     }
 
     $fields['node']['published_on'] = array(

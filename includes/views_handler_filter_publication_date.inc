@@ -53,8 +53,6 @@ class views_handler_filter_publication_date extends views_handler_filter_date {
       $field = "$this->table_alias.$this->real_field";
     }
     else {
-      $field_name = $this->real_field . '_or_' . $this->options['null_date'];
-
       switch ($this->options['null_date']) {
         case 'now':
           $alt_value = REQUEST_TIME;
