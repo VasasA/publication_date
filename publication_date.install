@@ -73,38 +73,6 @@ function publication_date_uninstall() {
 }
 
 /**
- * Change default published_at value from 0 to 2147483647.
- */
-function publication_date_update_7001() {
-  db_update('publication_date')
-    ->fields(array('published_at' => 2147483647))
-    ->condition('published_at', 0)
-    ->execute();
-}
-
-/**
- * Change default published_at value to NULL.
- */
-function publication_date_update_7002() {
-  db_drop_index('publication_date', 'published_at');
-  db_change_field('publication_date', 'published_at', 'published_at', array(
-    'description' => 'The timestamp of the node\'s first publication.',
-    'type' => 'int',
-    'not null' => FALSE,
-    'default' => NULL,
-  ), array(
-    'indexes' => array(
-      'published_at' => array('published_at'),
-    ),
-  ));
-
-  db_update('publication_date')
-    ->fields(array('published_at' => NULL))
-    ->condition('published_at', 2147483647)
-    ->execute();
-}
-
-/**
  * Move publication_date module settings from variables to config.
  */
 function publication_date_update_1000() {
@@ -119,4 +87,11 @@ function publication_date_update_1000() {
   update_variable_del('publication_date_popup_enable');
   update_variable_del('publication_date_popup_year_start');
   update_variable_del('publication_date_popup_year_end');
+}
+
+/**
+ * Implements hook_update_last_removed().
+ */
+function publication_date_update_last_removed() {
+  return 7002;
 }
