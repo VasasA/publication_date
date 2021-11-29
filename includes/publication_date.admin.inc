@@ -10,6 +10,7 @@
  */
 function publication_date_admin_form($form, &$form_state) {
   // Publication Date Popup Configuration.
+  $config = config('publication_date.settings');
   $form['popup_config'] = array(
     '#type' => 'fieldset',
     '#title' => t('Date Popup Configuration'),
@@ -20,12 +21,12 @@ function publication_date_admin_form($form, &$form_state) {
   $form['popup_config']['publication_date_popup_enable'] = array(
     '#type' => 'checkbox',
     '#title' => t('Use date popup field'),
-    '#default_value' => variable_get('publication_date_popup_enable', 1),
+    '#default_value' => $config->get('publication_date_popup_enable'),
   );
   $form['popup_config']['publication_date_popup_year_start'] = array(
     '#type' => 'textfield',
     '#title' => t('Starting year'),
-    '#default_value' => variable_get('publication_date_popup_year_start', '6'),
+    '#default_value' => $config->get('publication_date_popup_year_start'),
     '#field_prefix' => '-',
     '#field_suffix' => 'years from now',
     '#maxlength' => 10,
@@ -35,7 +36,7 @@ function publication_date_admin_form($form, &$form_state) {
   $form['popup_config']['publication_date_popup_year_end'] = array(
     '#type' => 'textfield',
     '#title' => t('Ending year'),
-    '#default_value' => variable_get('publication_date_popup_year_end', '1'),
+    '#default_value' => $config->get('publication_date_popup_year_end'),
     '#field_prefix' => '+',
     '#field_suffix' => 'years from now',
     '#maxlength' => 10,

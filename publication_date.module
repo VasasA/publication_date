@@ -148,6 +148,7 @@ function publication_date_views_api() {
  * @note: This won't work where you have Display Suite/REL enabled.
  */
 function publication_date_form_node_form_alter(&$form, &$form_state, $form_id) {
+  $config = config('publication_date.settings');
   $node = $form["#node"];
 
   // If this is an existing node then get the currently set publication date.
@@ -158,7 +159,7 @@ function publication_date_form_node_form_alter(&$form, &$form_state, $form_id) {
 
   // Use the popup date picker provided by the Date module, if it is enabled and
   // the user has access to edit the publication date.
-  if ($pubdate_access && module_exists('date_popup') && variable_get('publication_date_popup_enable', 1)) {
+  if ($pubdate_access && module_exists('date_popup') && $config->get('publication_date_popup_enable')) {
     $form['options']['pubdate'] = array(
       '#type' => 'date_popup',
       '#title' => t('Published on'),
@@ -167,7 +168,7 @@ function publication_date_form_node_form_alter(&$form, &$form_state, $form_id) {
       '#date_timezone' => date_default_timezone(),
       '#date_format' => PUBLICATION_DATE_FORMAT,
       '#date_increment' => 1,
-      '#date_year_range' => '-' . variable_get('publication_date_popup_year_start', '6') . ':+' . variable_get('publication_date_popup_year_end', '1'),
+      '#date_year_range' => '-' . $config->get('publication_date_popup_year_start') . ':+' . $config->get('publication_date_popup_year_end'),
       '#weight' => -1,
       '#access' => TRUE,
       // If there is an existing publication date, set it as the default value.
@@ -452,4 +453,15 @@ function publication_date_autoload_info() {
     'PublicationDateViewsHandlerFilter' => 'includes/views_handler_filter_publication_date.inc',
     'PublicationDateViewsHandlerSort' => 'includes/views_handler_sort_publication_date.inc',
   );
+}
+
+/**
+ * Implements hook_config_info().
+ */
+function publication_date_config_info() {
+  $prefixes['publication_date.settings'] = array(
+    'label' => t('Publication Date settings'),
+    'group' => t('Configuration'),
+  );
+  return $prefixes;
 }
