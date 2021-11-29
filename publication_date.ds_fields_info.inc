@@ -13,10 +13,10 @@ function publication_date_ds_fields_info($entity_type) {
 
   if ($entity_type == 'node') {
     // Get the time format specified in date/time.
-    $format_types = system_get_date_types();
+    $format_types = system_get_date_formats();
     $date_formatters = array();
     foreach ($format_types as $formatter) {
-      $date_formatters['publication_date_' . $formatter['type']] = t('@title', array('@title' => $formatter['title']));
+      $date_formatters['publication_date_' . $formatter['name']] = t('@title', array('@title' => $formatter['label']));
     }
 
     $fields['node']['published_on'] = array(
