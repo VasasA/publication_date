@@ -1,0 +1,5 @@
+[PublicationDateTestCase]
+name = Published date setting test
+description = Test to see the published_at values are working.
+group = Publication Date
+file = publication_date.test

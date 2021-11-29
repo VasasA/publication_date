@@ -17,17 +17,6 @@ class PublicationDateTestCase extends DrupalWebTestCase {
   protected $privileged_user;
 
   /**
-   * Provide the test's meta information.
-   */
-  public static function getInfo() {
-    return array(
-      'name' => 'Published date setting test',
-      'description' => 'Test to see the published_at values are working',
-      'group' => 'Publication Date',
-    );
-  }
-
-  /**
    * Create a user and prepare for testing.
    */
   protected function setUp() {
