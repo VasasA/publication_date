@@ -442,3 +442,14 @@ function publication_date_menu() {
 
   return $items;
 }
+
+/**
+ * Implements hook_autoload_info().
+ */
+function publication_date_autoload_info() {
+  return array(
+    'PublicationDateViewsHandlerField' => 'includes/views_handler_field_publication_date.inc',
+    'PublicationDateViewsHandlerFilter' => 'includes/views_handler_filter_publication_date.inc',
+    'PublicationDateViewsHandlerSort' => 'includes/views_handler_sort_publication_date.inc',
+  );
+}
