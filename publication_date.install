@@ -103,3 +103,20 @@ function publication_date_update_7002() {
     ->condition('published_at', 2147483647)
     ->execute();
 }
+
+/**
+ * Move publication_date module settings from variables to config.
+ */
+function publication_date_update_1000() {
+  // Migrate variables to config.
+  $config = config('publication_date.settings');
+  $config->set('publication_date_popup_enable', update_variable_get('publication_date_popup_enable', 1));
+  $config->set('publication_date_popup_year_start', update_variable_get('publication_date_popup_year_start', '6'));
+  $config->set('publication_date_popup_year_end', update_variable_get('publication_date_popup_year_end', '1'));
+  $config->save();
+
+  // Delete variables.
+  update_variable_del('publication_date_popup_enable');
+  update_variable_del('publication_date_popup_year_start');
+  update_variable_del('publication_date_popup_year_end');
+}
