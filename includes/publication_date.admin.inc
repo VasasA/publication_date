@@ -11,6 +11,7 @@
 function publication_date_admin_form($form, &$form_state) {
   // Publication Date Popup Configuration.
   $config = config('publication_date.settings');
+  $form['#config'] = 'publication_date.settings';
   $form['popup_config'] = array(
     '#type' => 'fieldset',
     '#title' => t('Date Popup Configuration'),
