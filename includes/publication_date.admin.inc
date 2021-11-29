@@ -25,24 +25,24 @@ function publication_date_admin_form($form, &$form_state) {
     '#default_value' => $config->get('publication_date_popup_enable'),
   );
   $form['popup_config']['publication_date_popup_year_start'] = array(
-    '#type' => 'textfield',
+    '#type' => 'number',
     '#title' => t('Starting year'),
     '#default_value' => $config->get('publication_date_popup_year_start'),
     '#field_prefix' => '-',
     '#field_suffix' => 'years from now',
     '#maxlength' => 10,
     '#size' => 3,
-    '#element_validate' => array('element_validate_integer_positive'),
+    '#min' => 0,
   );
   $form['popup_config']['publication_date_popup_year_end'] = array(
-    '#type' => 'textfield',
+    '#type' => 'number',
     '#title' => t('Ending year'),
     '#default_value' => $config->get('publication_date_popup_year_end'),
     '#field_prefix' => '+',
     '#field_suffix' => 'years from now',
     '#maxlength' => 10,
     '#size' => 3,
-    '#element_validate' => array('element_validate_integer_positive'),
+    '#min' => 0,
   );
 
   return system_settings_form($form);
