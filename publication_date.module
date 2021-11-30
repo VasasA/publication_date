@@ -473,9 +473,9 @@ function publication_date_menu() {
  */
 function publication_date_autoload_info() {
   return array(
-    'PublicationDateViewsHandlerField' => 'includes/views_handler_field_publication_date.inc',
-    'PublicationDateViewsHandlerFilter' => 'includes/views_handler_filter_publication_date.inc',
-    'PublicationDateViewsHandlerSort' => 'includes/views_handler_sort_publication_date.inc',
+    'views_handler_field_publication_date' => 'includes/views_handler_field_publication_date.inc',
+    'views_handler_filter_publication_date' => 'includes/views_handler_filter_publication_date.inc',
+    'views_handler_sort_publication_date' => 'includes/views_handler_sort_publication_date.inc',
   );
 }
 
