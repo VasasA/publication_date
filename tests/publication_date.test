@@ -28,6 +28,7 @@ class PublicationDateTestCase extends BackdropWebTestCase {
       'set page published on date',
     ));
     $this->backdropLogin($this->privileged_user);
+    config_set('publication_date.settings', 'publication_date_popup_enable', 0);
   }
 
   /**
@@ -119,11 +120,11 @@ class PublicationDateTestCase extends BackdropWebTestCase {
 
     // Set a custom time and make sure that it is stored correctly.
     $ctime = REQUEST_TIME - 180;
-    $edit['pubdate'] = format_date($ctime, 'custom', 'Y-m-d H:i:s O');
+    $edit['pubdate'] = format_date($ctime, 'custom', 'Y-m-d H:i:s O', date_default_timezone_get());
     $this->backdropPost('node/' . $node->nid . '/edit', $edit, t('Save'));
     $this->backdropGet('node/' . $node->nid . '/edit');
     $custom_value = $this->_getPubdateFieldValue();
-    $this->assertTrue($custom_value == format_date($ctime, 'custom', 'Y-m-d H:i:s O'), t('Custom time/date was set'));
+    $this->assertTrue($custom_value == format_date($ctime, 'custom', 'Y-m-d H:i:s O', backdrop_get_user_timezone()), t('Custom time/date was set'));
 
     // Set the field to empty and and make sure the published date is reset.
     $edit['pubdate'] = '';
