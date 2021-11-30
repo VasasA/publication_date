@@ -23,7 +23,7 @@ function publication_date_ds_fields_info($entity_type) {
       'title' => t('Published on'),
       'field_type' => DS_FIELD_TYPE_FUNCTION,
       'function' => 'publication_date_render_published_at_field',
-      'file' => drupal_get_path('module', 'publication_date') . '/publication_date.ds_fields_info.inc',
+      'file' => backdrop_get_path('module', 'publication_date') . '/publication_date.ds_fields_info.inc',
       'properties' => array(
         'formatters' => $date_formatters,
       ),

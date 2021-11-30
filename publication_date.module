@@ -101,7 +101,7 @@ function _publication_date_set_date($node, $op = '') {
   }
 
   // Allow other modules to alter the publication date before it is saved.
-  drupal_alter('publication_date', $published_at, $node, $op);
+  backdrop_alter('publication_date', $published_at, $node, $op);
 
   // Update the node object.
   $node->published_at = $published_at;
@@ -136,7 +136,7 @@ function _publication_date_get_date($nid) {
 function publication_date_views_api() {
   return array(
     'api' => 3,
-    'path' => drupal_get_path('module', 'publication_date') . '/includes',
+    'path' => backdrop_get_path('module', 'publication_date') . '/includes',
   );
 }
 
@@ -435,7 +435,7 @@ function publication_date_menu() {
   $items['admin/config/content/publication-date'] = array(
     'title' => 'Publication date',
     'description' => 'Configure publication date settings when using the date popup module.',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('publication_date_admin_form'),
     'access arguments' => array('administer publication date'),
     'file' => 'includes/publication_date.admin.inc',

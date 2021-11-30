@@ -15,7 +15,6 @@ function publication_date_admin_form($form, &$form_state) {
   $form['popup_config'] = array(
     '#type' => 'fieldset',
     '#title' => t('Date Popup Configuration'),
-    '#description' => t('Publication date can use the date popup field widget provided by the <a href="@project-link">Date</a> project, if enabled.', array('@project-link' => 'https://drupal.org/project/date')),
     '#collapsible' => FALSE,
     '#collapsed' => FALSE,
   );

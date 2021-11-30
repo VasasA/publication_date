@@ -8,7 +8,7 @@
 /**
  * Test publication date functionality.
  */
-class PublicationDateTestCase extends DrupalWebTestCase {
+class PublicationDateTestCase extends BackdropWebTestCase {
   /**
    * Holds user object for test functions.
    *
@@ -21,13 +21,13 @@ class PublicationDateTestCase extends DrupalWebTestCase {
    */
   protected function setUp() {
     parent::setUp('publication_date');
-    $this->privileged_user = $this->drupalCreateUser(array(
+    $this->privileged_user = $this->backdropCreateUser(array(
       'create page content',
       'edit own page content',
       'administer nodes',
       'set page published on date',
     ));
-    $this->drupalLogin($this->privileged_user);
+    $this->backdropLogin($this->privileged_user);
   }
 
   /**
@@ -36,7 +36,7 @@ class PublicationDateTestCase extends DrupalWebTestCase {
   public function testActionSaving() {
 
     // Create node to edit.
-    $node = $this->drupalCreateNode(array('status' => 0));
+    $node = $this->backdropCreateNode(array('status' => 0));
     $unpublished_node = node_load($node->nid);
     $this->assertTrue(empty($unpublished_node->published_at), 'Published date is initially empty');
     $this->assertTrue($unpublished_node->published_at_or_now == REQUEST_TIME, 'Published at or now date is REQUEST_TIME');
@@ -97,9 +97,9 @@ class PublicationDateTestCase extends DrupalWebTestCase {
 
     // Hard to test created time == REQUEST_TIME because simpletest launches a
     // new HTTP session, so just check it's set.
-    $this->drupalPost('node/add/page', $edit, t('Save'));
-    $node = $this->drupalGetNodeByTitle($edit['title']);
-    $this->drupalGet('node/' . $node->nid . '/edit');
+    $this->backdropPost('node/add/page', $edit, t('Save'));
+    $node = $this->backdropGetNodeByTitle($edit['title']);
+    $this->backdropGet('node/' . $node->nid . '/edit');
     $value = $this->_getPubdateFieldValue();
 
     // Make sure it was created with Published At set.
@@ -107,29 +107,29 @@ class PublicationDateTestCase extends DrupalWebTestCase {
 
     // Unpublish the node and check that the field value is maintained.
     $edit['status'] = 0;
-    $this->drupalPost('node/' . $node->nid . '/edit', $edit, t('Save'));
-    $this->drupalGet('node/' . $node->nid . '/edit');
+    $this->backdropPost('node/' . $node->nid . '/edit', $edit, t('Save'));
+    $this->backdropGet('node/' . $node->nid . '/edit');
     $this->assertFieldByName('pubdate', $value, t('Pubdate is maintained when unpublished'));
 
     // Republish the node and check that the field value is maintained.
     $edit['status'] = 1;
-    $this->drupalPost('node/' . $node->nid . '/edit', $edit, t('Save'));
-    $this->drupalGet('node/' . $node->nid . '/edit');
+    $this->backdropPost('node/' . $node->nid . '/edit', $edit, t('Save'));
+    $this->backdropGet('node/' . $node->nid . '/edit');
     $this->assertFieldByName('pubdate', $value, t('Pubdate is maintained when republished'));
 
     // Set a custom time and make sure that it is stored correctly.
     $ctime = REQUEST_TIME - 180;
     $edit['pubdate'] = format_date($ctime, 'custom', 'Y-m-d H:i:s O');
-    $this->drupalPost('node/' . $node->nid . '/edit', $edit, t('Save'));
-    $this->drupalGet('node/' . $node->nid . '/edit');
+    $this->backdropPost('node/' . $node->nid . '/edit', $edit, t('Save'));
+    $this->backdropGet('node/' . $node->nid . '/edit');
     $custom_value = $this->_getPubdateFieldValue();
     $this->assertTrue($custom_value == format_date($ctime, 'custom', 'Y-m-d H:i:s O'), t('Custom time/date was set'));
 
     // Set the field to empty and and make sure the published date is reset.
     $edit['pubdate'] = '';
     sleep(2);
-    $this->drupalPost('node/' . $node->nid . '/edit', $edit, t('Save'));
-    $this->drupalGet('node/' . $node->nid . '/edit');
+    $this->backdropPost('node/' . $node->nid . '/edit', $edit, t('Save'));
+    $this->backdropGet('node/' . $node->nid . '/edit');
     $new_value = $this->_getPubdateFieldValue();
     $this->assertNotNull($new_value, t('Published time was set automatically when there was no value entered'));
     $this->assertNotNull($new_value != $custom_value, t('The new published-at time is different from the custom time'));
@@ -137,12 +137,12 @@ class PublicationDateTestCase extends DrupalWebTestCase {
 
     // Unpublish the node.
     $edit['status'] = 0;
-    $this->drupalPost('node/' . $node->nid . '/edit', $edit, t('Save'));
+    $this->backdropPost('node/' . $node->nid . '/edit', $edit, t('Save'));
 
     // Set the field to empty and and make sure that it stays empty.
     $edit['pubdate'] = '';
-    $this->drupalPost('node/' . $node->nid . '/edit', $edit, t('Save'));
-    $this->drupalGet('node/' . $node->nid . '/edit');
+    $this->backdropPost('node/' . $node->nid . '/edit', $edit, t('Save'));
+    $this->backdropGet('node/' . $node->nid . '/edit');
     $this->assertFieldByName('pubdate', '', t('Publication date field is empty'));
   }
 
@@ -152,7 +152,7 @@ class PublicationDateTestCase extends DrupalWebTestCase {
    * This is useful for people using 'migrate' etc.
    */
   public function testActionSavingSetDate() {
-    $node = $this->drupalCreateNode(array('status' => 0));
+    $node = $this->backdropCreateNode(array('status' => 0));
     $unpublished_node = node_load($node->nid);
     $this->assertTrue(empty($unpublished_node->published_at), 'Published date is initially empty');
 
