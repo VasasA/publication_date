@@ -12,6 +12,8 @@ define('PUBLICATION_DATE_MAX', 2147483647);
 define('PUBLICATION_DATE_MIN', -2147483648);
 
 define('PUBLICATION_DATE_FORMAT', 'Y-m-d H:i:s');
+define('PUBLICATION_DATE_FORMAT_DATE', 'Y-m-d');
+define('PUBLICATION_DATE_FORMAT_TIME', 'H:i:s');
 define('PUBLICATION_DATE_FORMAT_WITH_TZ', 'Y-m-d H:i:s O');
 
 /**
@@ -150,6 +152,7 @@ function publication_date_views_api() {
 function publication_date_form_node_form_alter(&$form, &$form_state, $form_id) {
   $config = config('publication_date.settings');
   $node = $form["#node"];
+  $year = date('Y', time());
 
   // If this is an existing node then get the currently set publication date.
   $published_at = ($form['nid'] == NULL || empty($node->published_at)) ? NULL : $node->published_at;
@@ -159,21 +162,25 @@ function publication_date_form_node_form_alter(&$form, &$form_state, $form_id) {
 
   // Use the popup date picker provided by the Date module, if it is enabled and
   // the user has access to edit the publication date.
-  if ($pubdate_access && module_exists('date_popup') && $config->get('publication_date_popup_enable')) {
+  if ($pubdate_access && $config->get('publication_date_popup_enable')) {
     $form['options']['pubdate'] = array(
-      '#type' => 'date_popup',
+      '#type' => 'html_datetime',
       '#title' => t('Published on'),
       '#description' => t('Leave blank to use the time of form submission.'),
-      '#date_type' => DATE_UNIX,
-      '#date_timezone' => date_default_timezone(),
-      '#date_format' => PUBLICATION_DATE_FORMAT,
-      '#date_increment' => 1,
-      '#date_year_range' => '-' . $config->get('publication_date_popup_year_start') . ':+' . $config->get('publication_date_popup_year_end'),
+      '#attributes' => array(
+        'date' => array(
+          'min' => $year - $config->get('publication_date_popup_year_start') . '-01-01',
+          'max' => $year + $config->get('publication_date_popup_year_end') . '-12-31',
+        ),
+      ),
       '#weight' => -1,
       '#access' => TRUE,
       // If there is an existing publication date, set it as the default value.
       // The date popup field requires a date format without the timezone.
-      '#default_value' => empty($published_at) ? '' : format_date($published_at, 'custom', PUBLICATION_DATE_FORMAT),
+      '#default_value' => array(
+        'date' => empty($published_at) ? '' : format_date($published_at, 'custom', PUBLICATION_DATE_FORMAT_DATE),
+        'time' => empty($published_at) ? '' : format_date($published_at, 'custom', PUBLICATION_DATE_FORMAT_TIME),
+      ),
     );
   }
   // Fallback to a standard text field.
@@ -182,7 +189,7 @@ function publication_date_form_node_form_alter(&$form, &$form_state, $form_id) {
       '#type' => 'textfield',
       '#title' => t('Published on'),
       '#maxlength' => 25,
-      '#description' => t('Format: %time. Leave blank to use the time of form submission.', array(
+      '#description' => t('Format: %time Leave blank to use the time of form submission.', array(
         '%time' => format_date(REQUEST_TIME, 'custom', PUBLICATION_DATE_FORMAT),
       )),
       '#weight' => -1,
@@ -209,6 +216,22 @@ function publication_date_form_node_form_alter(&$form, &$form_state, $form_id) {
   // Add custom validation and submit handlers.
   $form['#validate'][] = 'publication_date_pubdate_validate';
   $form['#submit'][] = 'publication_date_pubdate_submit';
+}
+
+/**
+ * Convert date-time array to string.
+ */
+function _publication_date_convert_array($datetime) {
+  if (is_array($datetime)) {
+    $return = implode(' ', $datetime);
+    if ($return === ' ') {
+      $return = '';
+    }
+  }
+  else {
+    $return = $datetime;
+  }
+  return $return;
 }
 
 /**
@@ -243,7 +266,8 @@ function publication_date_pubdate_validate($form, &$form_state) {
 function publication_date_pubdate_submit($form, &$form_state) {
   // Set $node->published_at to the publication date field value if it was set,
   // or NULL if it was not.
-  $form_state['node']->published_at = empty($form_state['values']['pubdate']) ? NULL : strtotime(($form_state['values']['pubdate']));
+  $pubdate = strtotime(_publication_date_convert_array($form_state['values']['pubdate']));
+  $form_state['node']->published_at = empty($pubdate) ? NULL : $pubdate;
 }
 
 /**
