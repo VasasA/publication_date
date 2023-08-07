@@ -36,7 +36,12 @@ function publication_date_token_info_alter(&$data) {
  */
 function publication_date_tokens($type, $tokens, array $data = array(), array $options = array()) {
   $replacements = array();
-  $language_code = isset($options['language']) ? $options['language']->language : NULL;
+  if (isset($options['language']) && isset($options['language']->language)) {
+    $language_code = $options['language']->language;
+ }
+ else {
+   $language_code = NULL;
+ }
 
   if ($type == 'node' && !empty($data['node'])) {
     $node = $data['node'];
