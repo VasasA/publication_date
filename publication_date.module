@@ -175,6 +175,11 @@ function publication_date_form_node_form_alter(&$form, &$form_state, $form_id) {
       ),
       '#weight' => -1,
       '#access' => TRUE,
+      '#states' => array(
+        'invisible' => array(
+          '.form-item-status input' => array('value' => '2'),
+        ),
+      ),
       // If there is an existing publication date, set it as the default value.
       // The date popup field requires a date format without the timezone.
       '#default_value' => array(
